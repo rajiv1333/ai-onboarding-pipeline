@@ -1,0 +1,59 @@
+{
+  "family": "onboarding-prod-worker",
+  "networkMode": "awsvpc",
+  "requiresCompatibilities": ["FARGATE"],
+  "cpu": "256",
+  "memory": "512",
+  "taskRoleArn": "arn:aws:iam::YOUR_ACCOUNT_ID:role/onboarding-prod-app-role",
+  "executionRoleArn": "arn:aws:iam::YOUR_ACCOUNT_ID:role/onboarding-prod-ecs-execution-role",
+  "containerDefinitions": [
+    {
+      "name": "worker",
+      "image": "YOUR_ACCOUNT_ID.dkr.ecr.YOUR_REGION.amazonaws.com/onboarding-prod:latest",
+      "essential": true,
+      "command": ["python", "-m", "app.workers.runner"],
+      "environment": [
+        { "name": "APP_MODE",                  "value": "worker" },
+        { "name": "AWS_REGION",                "value": "YOUR_REGION" },
+        { "name": "SECRETS_PREFIX",            "value": "onboarding-prod/" },
+        { "name": "LLM_PROVIDER",              "value": "anthropic" },
+        { "name": "QUALIFY_SCORE_THRESHOLD",   "value": "70" },
+        { "name": "QUALIFY_MIN_BUDGET_USD",    "value": "3000" },
+        { "name": "STORAGE_BACKEND",           "value": "s3" },
+        { "name": "NOTIFICATION_EMAIL",        "value": "you@yourdomain.com" }
+      ],
+      "secrets": [
+        {
+          "name": "DATABASE_URL",
+          "valueFrom": "arn:aws:secretsmanager:YOUR_REGION:YOUR_ACCOUNT_ID:secret:onboarding-prod/database-url"
+        },
+        {
+          "name": "ANTHROPIC_API_KEY",
+          "valueFrom": "arn:aws:secretsmanager:YOUR_REGION:YOUR_ACCOUNT_ID:secret:onboarding-prod/anthropic-api-key"
+        },
+        {
+          "name": "SENDGRID_API_KEY",
+          "valueFrom": "arn:aws:secretsmanager:YOUR_REGION:YOUR_ACCOUNT_ID:secret:onboarding-prod/sendgrid-api-key"
+        }
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/onboarding-prod-worker",
+          "awslogs-region": "YOUR_REGION",
+          "awslogs-stream-prefix": "worker"
+        }
+      },
+      "healthCheck": null,
+      "portMappings": [],
+      "mountPoints": [],
+      "volumesFrom": []
+    }
+  ],
+  "volumes": [],
+  "tags": [
+    { "key": "Project",     "value": "ai-onboarding" },
+    { "key": "Environment", "value": "prod" },
+    { "key": "ManagedBy",   "value": "ecs-task-definition" }
+  ]
+}
