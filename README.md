@@ -110,8 +110,8 @@ curl -X POST http://localhost:8000/intake \
   -H "X-API-Key: dev-secret-change-me" \
   -H "Content-Type: application/json" \
   -d '{
-    "name": "Priya Nair",
-    "email": "priya@example.com",
+    "name": "rajiv sharma",
+    "email": "rajiv@example.com",
     "company": "Nair Logistics",
     "problem_description": "We spend 20 hours a week manually copying data between spreadsheets and our accounting system. We have 8 staff and want to automate this.",
     "budget_range": "$5,000 - $10,000",
