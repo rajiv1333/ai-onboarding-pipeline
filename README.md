@@ -112,7 +112,7 @@ curl -X POST http://localhost:8000/intake \
   -d '{
     "name": "rajiv sharma",
     "email": "rajiv@example.com",
-    "company": "Nair Logistics",
+    "company": "KryptonAI",
     "problem_description": "We spend 20 hours a week manually copying data between spreadsheets and our accounting system. We have 8 staff and want to automate this.",
     "budget_range": "$5,000 - $10,000",
     "timeline": "2-3 months",
